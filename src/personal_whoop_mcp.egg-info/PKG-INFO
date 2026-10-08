@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: personal-whoop-mcp
+Version: 0.1.0
+Summary: Personal MCP server for secure WHOOP health and fitness data access
+Requires-Python: >=3.11
+Requires-Dist: mcp[cli]
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: httpx
+Requires-Dist: python-dotenv

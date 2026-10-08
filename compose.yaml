@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: personal-whoop-mcp
+
+    env_file:
+      - .env
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - whoop-data:/app/.data
+
+    restart: unless-stopped
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/')"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+  ngrok:
+    image: ngrok/ngrok:latest
+
+    container_name: personal-whoop-ngrok
+
+    env_file:
+      - .env
+
+    command:
+      - "http"
+      - "app:8000"
+      - "--url=https://${NGROK_DOMAIN}"
+
+    depends_on:
+      app:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+
+volumes:
+  whoop-data:
